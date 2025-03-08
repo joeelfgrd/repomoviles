@@ -3,6 +3,7 @@ package edu.badpals.examenfinalpdmm.activities;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import edu.badpals.examenfinalpdmm.Helpers;
@@ -35,7 +40,6 @@ public class ListadoAnimales extends AppCompatActivity {
     private Button btnFiltrarAnimal,btnFiltrarExtinto,btnEliminarFiltro;
     private List<Animal> listAnimales;
     Toolbar tb;
-
 
 
     @Override
@@ -112,14 +116,12 @@ public class ListadoAnimales extends AppCompatActivity {
                     myvh.imgAnimal.setImageResource(R.drawable.gato);
                 }
 
-
                 //Asignamos el intent para abrir la informacion detallada
                 myvh.btnDetalles.setOnClickListener((view) -> {
                     Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
-                    intent.putExtra("ANIMAL_ID", animal.getId());
+                    addToEncriptedSharePreferences(animal.getId());
                     startActivity(intent);
                 });
-
 
 
             }
@@ -138,6 +140,29 @@ public class ListadoAnimales extends AppCompatActivity {
             Toast.makeText(ListadoAnimales.this, "No hay animales disponibles", Toast.LENGTH_SHORT).show();
         } else {
             cargarAdapter(animales);
+        }
+    }
+
+    private void addToEncriptedSharePreferences(int id) {
+        try {
+            MasterKey mk = new MasterKey.Builder(this)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences encryptedSp = EncryptedSharedPreferences.create(this, "ENCRYPTEDSHARE",
+                    mk,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            SharedPreferences.Editor encryptedEditor = encryptedSp.edit();
+
+            encryptedEditor.putInt(activity_animal_informacion.ANIMAL_ID,id);
+
+            encryptedEditor.apply();
+
+
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -13,18 +13,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import edu.badpals.examenfinalpdmm.Helpers;
 import edu.badpals.examenfinalpdmm.R;
 import edu.badpals.examenfinalpdmm.model.Animal;
 import edu.badpals.examenfinalpdmm.repository.AnimalRepository;
 
 public class activity_animal_informacion extends AppCompatActivity {
+
+
     //Siempre al iniciar un activity metemos las variables para los objetos de los xml
     private Button btnVolver, btnAdoptar, btnDevolver;
     private ImageView ivFotoAnimal;
     private TextView tvNombre, tvRaza, tvHabitat, tvAnimalesDisponibles,tvAnimalesExtintos;
 
+
+
+
+    //Creamos una variable estática en la que almacenamos nuestro shared preference,este nombre en mayusculas es el que se pone en
+    // listado animales al añadirlos al shared preference
     public static final String ANIMAL_ID = "animalId";
+    //inicializamos una variable que es la que cargamos con el resultado de lo de arriba mediante el método de helpers
     public int animalId = 0;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Llamamos a la vista
@@ -41,10 +53,14 @@ public class activity_animal_informacion extends AppCompatActivity {
         tvAnimalesDisponibles= findViewById(R.id.tvAnimalesDisponibles);
         tvAnimalesExtintos= findViewById(R.id.tvAnimalesExtintos);
 
-        //Obtenemos el id del item seleccionado en la otra ventana en el recyclerview a traves del intent y pasamos el dato
-        animalId = getIntent().getIntExtra("ANIMAL_ID", 0);
+
+
+        //Obtenemos el id del item seleccionado en la otra ventana en el recyclerview a traves del sharedpreference y pasamos el dato
+        animalId = Helpers.getID_Animal(this);
         //El id que pasamos al metodo de cargar es el que acabamos de obtener con el intent
         cargarInfoAnimal(animalId);
+
+
 
 
         btnVolver.setOnClickListener(v -> {
@@ -55,6 +71,9 @@ public class activity_animal_informacion extends AppCompatActivity {
 
 
     }
+
+
+
     public void cargarInfoAnimal(int id){
         Animal animal = AnimalRepository.getAnimalById(id);
 
@@ -72,10 +91,6 @@ public class activity_animal_informacion extends AppCompatActivity {
         }
         tvAnimalesDisponibles.setText("Disponible");
         ivFotoAnimal.setImageResource(R.drawable.gato);
-
-
-
-
     }
 
 }
