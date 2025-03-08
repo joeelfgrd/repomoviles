@@ -22,7 +22,7 @@ public class activity_animal_informacion extends AppCompatActivity {
 
 
     //Siempre al iniciar un activity metemos las variables para los objetos de los xml
-    private Button btnVolver, btnAdoptar, btnDevolver;
+    private Button btnVolver, btnExtinguir,btnSumar;
     private ImageView ivFotoAnimal;
     private TextView tvNombre, tvRaza, tvHabitat, tvAnimalesDisponibles,tvAnimalesExtintos;
 
@@ -45,8 +45,8 @@ public class activity_animal_informacion extends AppCompatActivity {
         //Vinculamos las variables con su correspondencia en el xml
         ivFotoAnimal= findViewById(R.id.ivFotoAnimal);
         btnVolver= findViewById(R.id.btnVolver);
-        btnAdoptar= findViewById(R.id.btnAdoptar);
-        btnDevolver= findViewById(R.id.btnDevolver);
+        btnExtinguir= findViewById(R.id.btnExtinguir);
+        btnSumar= findViewById(R.id.btnSumar);
         tvNombre= findViewById(R.id.tvNombre);
         tvRaza= findViewById(R.id.tvRaza);
         tvHabitat= findViewById(R.id.tvHabitat);
@@ -71,7 +71,6 @@ public class activity_animal_informacion extends AppCompatActivity {
 
 
     }
-
 
 
     public void cargarInfoAnimal(int id){

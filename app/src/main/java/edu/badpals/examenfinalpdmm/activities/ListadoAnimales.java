@@ -1,7 +1,5 @@
 package edu.badpals.examenfinalpdmm.activities;
 
-
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,133 +11,75 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.badpals.examenfinalpdmm.Helpers;
 import edu.badpals.examenfinalpdmm.R;
 import edu.badpals.examenfinalpdmm.model.Animal;
 import edu.badpals.examenfinalpdmm.repository.AnimalRepository;
+import edu.badpals.examenfinalpdmm.viewModels.AnimalViewModel;
 
 public class ListadoAnimales extends AppCompatActivity {
 
-    //Primero se inicializan las variables de xml para trabajar aqui
     private RecyclerView recyclerViewAnimales;
-    private Button btnFiltrarAnimal,btnFiltrarExtinto,btnEliminarFiltro;
+    private Button btnFiltrarAnimal, btnFiltrarExtinto, btnEliminarFiltro;
     private List<Animal> listAnimales;
-    Toolbar tb;
-
+    private Toolbar tb;
+    private AnimalViewModel animalViewModel;
+    private AnimalAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_animales);
 
-        //Aqui obtenemos las variables con el id
+        // Vinculación de vistas
         recyclerViewAnimales = findViewById(R.id.recyclerViewAnimales);
         recyclerViewAnimales.setLayoutManager(new LinearLayoutManager(this));
-        btnFiltrarAnimal= findViewById(R.id.btnFiltrarAnimal);
-        btnFiltrarExtinto= findViewById(R.id.btnFiltrarExtinto);
-        btnEliminarFiltro= findViewById(R.id.btnEliminarFiltro);
-        tb=findViewById(R.id.toolbar);
+        btnFiltrarAnimal = findViewById(R.id.btnFiltrarAnimal);
+        btnFiltrarExtinto = findViewById(R.id.btnFiltrarExtinto);
+        btnEliminarFiltro = findViewById(R.id.btnEliminarFiltro);
+
+
+        tb = findViewById(R.id.toolbar);
         Helpers.cargarToolbar(this, tb);
 
-        cargarBooks();
-        //Cargamos la lista de los animales hardcodeados
-        listAnimales = AnimalRepository.getAnimales();
-        //Cargamos la lista de animales al adapter para cargarla en las tarjetas individuales
-        cargarAdapter(listAnimales);
+        // Inicialización del ViewModel
+        animalViewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
+        adapter = new AnimalAdapter();
+        recyclerViewAnimales.setAdapter(adapter);
 
-
-        //Aquí irán los listeners para los botones
-    }
-
-    private void cargarAdapter(List<Animal>animalesLista) {
-        // Se settea el adapter con el fragment
-        List<Animal> AnimalesListado = animalesLista;
-        recyclerViewAnimales.setAdapter(new RecyclerView.Adapter() {
-            class MyViewHolder extends RecyclerView.ViewHolder {
-                //Se inicializan las variables del cuadrito que se ve en la lista,el fragment
-                ImageView imgAnimal;
-                TextView txtNombre, txtRaza, txt_habitat, txt_extinto;
-                Button btnDetalles;
-
-                public MyViewHolder(@NonNull View itemView) {
-                    super(itemView);
-                    imgAnimal = itemView.findViewById(R.id.imgAnimal);
-                    txtNombre = itemView.findViewById(R.id.txtNombre);
-                    txtRaza = itemView.findViewById(R.id.txtRaza);
-                    txt_habitat = itemView.findViewById(R.id.txt_habitat);
-                    txt_extinto = itemView.findViewById(R.id.txt_extinto);
-                    btnDetalles = itemView.findViewById(R.id.btnDetalles);
-                }
-            }
-
-            // Función que crea el fragment
-            @NonNull
+        // Observa cambios en la lista de animales y actualiza el adapter
+        animalViewModel.getAnimales().observe(this, new Observer<List<Animal>>() {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.fragment_animal_listado, parent, false);
-                return new MyViewHolder(view);
-            }
-
-            // Función que se encarga de llenar el fragment con los datos de los animales
-            @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                MyViewHolder myvh = (MyViewHolder) holder;
-                Animal animal = AnimalesListado.get(position);
-
-                myvh.txtNombre.setText(animal.getNombre());
-                myvh.txtRaza.setText(animal.getRaza());
-
-                myvh.txt_habitat.setText(animal.getHabitat());
-                if (animal.isExtinto()) {
-                    myvh.txt_extinto.setText("si");
-                } else {
-                    myvh.txt_extinto.setText("No");
-                }
-                String urlImagen = animal.getFoto();
-                if (urlImagen != null && !urlImagen.isEmpty()) {
-                    myvh.imgAnimal.setImageResource(R.drawable.gato);
-                }
-
-                //Asignamos el intent para abrir la informacion detallada
-                myvh.btnDetalles.setOnClickListener((view) -> {
-                    Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
-                    addToEncriptedSharePreferences(animal.getId());
-                    startActivity(intent);
-                });
-
-
-            }
-
-            @Override
-            public int getItemCount() {
-                return AnimalesListado.size();
+            public void onChanged(List<Animal> animales) {
+                adapter.setAnimales(animales);
             }
         });
+
+        // Carga inicial de animales
+        cargarBooks();
     }
 
     public void cargarBooks() {
         List<Animal> animales = AnimalRepository.getAnimales();
-
         if (animales.isEmpty()) {
             Toast.makeText(ListadoAnimales.this, "No hay animales disponibles", Toast.LENGTH_SHORT).show();
         } else {
-            cargarAdapter(animales);
+            animalViewModel.setBooks(animales);
         }
     }
 
@@ -155,16 +95,67 @@ public class ListadoAnimales extends AppCompatActivity {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
 
             SharedPreferences.Editor encryptedEditor = encryptedSp.edit();
-
-            encryptedEditor.putInt(activity_animal_informacion.ANIMAL_ID,id);
-
+            encryptedEditor.putInt(activity_animal_informacion.ANIMAL_ID, id);
             encryptedEditor.apply();
-
-
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.MyViewHolder> {
+        private List<Animal> animales = new ArrayList<>();
 
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView imgAnimal;
+            TextView txtNombre, txtRaza, txt_habitat, txt_extinto;
+            Button btnDetalles;
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                imgAnimal = itemView.findViewById(R.id.imgAnimal);
+                txtNombre = itemView.findViewById(R.id.txtNombre);
+                txtRaza = itemView.findViewById(R.id.txtRaza);
+                txt_habitat = itemView.findViewById(R.id.txt_habitat);
+                txt_extinto = itemView.findViewById(R.id.txt_extinto);
+                btnDetalles = itemView.findViewById(R.id.btnDetalles);
+            }
+        }
+
+        @NonNull
+        @Override
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_animal_listado, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            Animal animal = animales.get(position);
+            holder.txtNombre.setText(animal.getNombre());
+            holder.txtRaza.setText(animal.getRaza());
+            holder.txt_habitat.setText(animal.getHabitat());
+            holder.txt_extinto.setText(animal.isExtinto() ? "Sí" : "No");
+
+            if (animal.getFoto() != null && !animal.getFoto().isEmpty()) {
+                holder.imgAnimal.setImageResource(R.drawable.gato);
+            }
+
+            holder.btnDetalles.setOnClickListener((view) -> {
+                Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
+                addToEncriptedSharePreferences(animal.getId());
+                startActivity(intent);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return animales.size();
+        }
+
+        void setAnimales(List<Animal> nuevosAnimales) {
+            this.animales = nuevosAnimales;
+            notifyDataSetChanged();
+        }
+    }
 }

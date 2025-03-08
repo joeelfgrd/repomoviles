@@ -122,20 +122,20 @@
             android:layout_marginBottom="5dp">
 
             <Button
-                android:id="@+id/btnAdoptar"
+                android:id="@+id/btnExtinguir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:backgroundTint="@color/button"
-                android:text="Adoptar" />
+                android:text="Extinguir" />
 
             <Button
-                android:id="@+id/btnDevolver"
+                android:id="@+id/btnSumar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:backgroundTint="@color/button"
-                android:text="Devolver" />
+                android:text="Criar nuevo" />
 
         </LinearLayout>
 
