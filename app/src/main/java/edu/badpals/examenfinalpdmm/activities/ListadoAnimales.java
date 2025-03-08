@@ -35,7 +35,7 @@ import edu.badpals.examenfinalpdmm.viewModels.AnimalViewModel;
 public class ListadoAnimales extends AppCompatActivity {
 
     private RecyclerView recyclerViewAnimales;
-    private Button btnFiltrarAnimal, btnFiltrarExtinto, btnEliminarFiltro;
+    private Button btnCrearNuevoAnimal;
     private List<Animal> listAnimales;
     private Toolbar tb;
     private AnimalViewModel animalViewModel;
@@ -49,9 +49,7 @@ public class ListadoAnimales extends AppCompatActivity {
         // Vinculación de vistas
         recyclerViewAnimales = findViewById(R.id.recyclerViewAnimales);
         recyclerViewAnimales.setLayoutManager(new LinearLayoutManager(this));
-        btnFiltrarAnimal = findViewById(R.id.btnFiltrarAnimal);
-        btnFiltrarExtinto = findViewById(R.id.btnFiltrarExtinto);
-        btnEliminarFiltro = findViewById(R.id.btnEliminarFiltro);
+        btnCrearNuevoAnimal = findViewById(R.id.btnCrearNuevoAnimal);
 
 
         tb = findViewById(R.id.toolbar);
@@ -72,6 +70,11 @@ public class ListadoAnimales extends AppCompatActivity {
 
         // Carga inicial de animales
         cargarBooks();
+
+        btnCrearNuevoAnimal.setOnClickListener((view) -> {
+            AnimalRepository.nuevoAnimalDefault();
+            animalViewModel.setBooks(AnimalRepository.getAnimales());
+        });
     }
 
     public void cargarBooks() {
@@ -130,18 +133,22 @@ public class ListadoAnimales extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull MyViewHolder myvh, int position) {
             Animal animal = animales.get(position);
-            holder.txtNombre.setText(animal.getNombre());
-            holder.txtRaza.setText(animal.getRaza());
-            holder.txt_habitat.setText(animal.getHabitat());
-            holder.txt_extinto.setText(animal.isExtinto() ? "Sí" : "No");
-
-            if (animal.getFoto() != null && !animal.getFoto().isEmpty()) {
-                holder.imgAnimal.setImageResource(R.drawable.gato);
+            myvh.txtNombre.setText(animal.getNombre());
+            myvh.txtRaza.setText(animal.getRaza());
+            myvh.txt_habitat.setText(animal.getHabitat());
+            if (animal.isExtinto()) {
+                myvh.txt_extinto.setText("si");
+            } else {
+                myvh.txt_extinto.setText("No");
             }
 
-            holder.btnDetalles.setOnClickListener((view) -> {
+            if (animal.getFoto() != null && !animal.getFoto().isEmpty()) {
+                myvh.imgAnimal.setImageResource(R.drawable.gato);
+            }
+
+            myvh.btnDetalles.setOnClickListener((view) -> {
                 Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
                 addToEncriptedSharePreferences(animal.getId());
                 startActivity(intent);

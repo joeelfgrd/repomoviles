@@ -23,7 +23,7 @@ import edu.badpals.examenfinalpdmm.activities.activity_menu_principal;
 public class Helpers {
 
     public static void cargarToolbar(AppCompatActivity context, Toolbar tb) {
-        // Configura la barra de herramientas (Toolbar) en la actividad proporcionada
+        // Configura el toolbar
         context.setSupportActionBar(tb);
 
         // Añade un proveedor de menú a la actividad

@@ -29,4 +29,13 @@ public class AnimalRepository {
         }
         return null;
     }
+
+    public static void nuevoAnimalDefault() {
+        if (listAnimales == null) {
+            listAnimales = new ArrayList<>();
+        }
+
+        int nuevoId = listAnimales.size() + 1;
+        listAnimales.add(new Animal(nuevoId, "Lobo Gris", "Canis lupus", "Bosques", false, "lobo"));
+    }
 }
