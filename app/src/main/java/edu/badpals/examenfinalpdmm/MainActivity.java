@@ -1,8 +1,11 @@
 package edu.badpals.examenfinalpdmm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.badpals.examenfinalpdmm.activities.ListadoAnimales;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -10,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listado_animales);
-
+        Intent intent = new Intent(this, ListadoAnimales.class);
+        startActivity(intent);
     }
 }

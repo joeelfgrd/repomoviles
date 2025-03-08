@@ -1,5 +1,7 @@
 package edu.badpals.examenfinalpdmm.activities;
 
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import edu.badpals.examenfinalpdmm.Auxiliar;
+import edu.badpals.examenfinalpdmm.Helpers;
 import edu.badpals.examenfinalpdmm.R;
 import edu.badpals.examenfinalpdmm.model.Animal;
 import edu.badpals.examenfinalpdmm.repository.AnimalRepository;
@@ -29,6 +34,9 @@ public class ListadoAnimales extends AppCompatActivity {
     private RecyclerView recyclerViewAnimales;
     private Button btnFiltrarAnimal,btnFiltrarExtinto,btnEliminarFiltro;
     private List<Animal> listAnimales;
+    Toolbar tb;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,8 @@ public class ListadoAnimales extends AppCompatActivity {
         btnFiltrarAnimal= findViewById(R.id.btnFiltrarAnimal);
         btnFiltrarExtinto= findViewById(R.id.btnFiltrarExtinto);
         btnEliminarFiltro= findViewById(R.id.btnEliminarFiltro);
+        tb=findViewById(R.id.toolbar);
+        Helpers.cargarToolbar(this, tb);
 
         cargarBooks();
         //Cargamos la lista de los animales hardcodeados
@@ -101,12 +111,16 @@ public class ListadoAnimales extends AppCompatActivity {
                 if (urlImagen != null && !urlImagen.isEmpty()) {
                     myvh.imgAnimal.setImageResource(R.drawable.gato);
                 }
+
+
                 //Asignamos el intent para abrir la informacion detallada
-                /*myvh.btn1.setOnClickListener((view) -> {
-                    Intent intent = new Intent(ListadoLibros.this, LibroInformacion.class);
-                    intent.putExtra(LibroInformacion.BOOK_ID_EXTRA, book.getId());
+                myvh.btnDetalles.setOnClickListener((view) -> {
+                    Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
+                    intent.putExtra("ANIMAL_ID", animal.getId());
                     startActivity(intent);
-                });*/
+                });
+
+
 
             }
 
