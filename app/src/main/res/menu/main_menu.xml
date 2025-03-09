@@ -9,16 +9,22 @@
         app:showAsAction="ifRoom">
         <menu>
             <item
+                android:id="@+id/btnMenuMenuPrincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="Menu Principal"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/btnMenuListadoAnimales"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:title="Listado Animales"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/btnMenuMenuPrincipal"
+                android:id="@+id/btnListadoCuidadores"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:title="Menu Principal"
+                android:title="Listado Cuidadores"
                 app:showAsAction="never" />
         </menu>
     </item>

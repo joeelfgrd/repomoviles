@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.badpals.examenfinalpdmm.activities.ListadoAnimales;
 import edu.badpals.examenfinalpdmm.activities.Listado_Cuidadores;
+import edu.badpals.examenfinalpdmm.activities.activity_menu_principal;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, Listado_Cuidadores.class);
+        Intent intent = new Intent(this, activity_menu_principal.class);
         startActivity(intent);
     }
 }

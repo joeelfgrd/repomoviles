@@ -22,6 +22,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import edu.badpals.examenfinalpdmm.activities.ListadoAnimales;
+import edu.badpals.examenfinalpdmm.activities.Listado_Cuidadores;
 import edu.badpals.examenfinalpdmm.activities.activity_animal_informacion;
 import edu.badpals.examenfinalpdmm.activities.activity_menu_principal;
 
@@ -48,14 +49,20 @@ public class Helpers {
                 // Obtiene el ID del elemento del menú seleccionado
                 int id = menuItem.getItemId();
                 // Maneja la selección de los elementos del menú
-                if(id == R.id.btnMenuListadoAnimales){
-                    Intent intent = new Intent(context, ListadoAnimales.class);
-                    context.startActivity(intent);
-                }
                 if(id == R.id.btnMenuMenuPrincipal){
                     Intent intent = new Intent(context, activity_menu_principal.class);
                     context.startActivity(intent);
                 }
+                if(id == R.id.btnMenuListadoAnimales){
+                    Intent intent = new Intent(context, ListadoAnimales.class);
+                    context.startActivity(intent);
+                }
+                if(id == R.id.btnListadoCuidadores){
+                    Intent intent = new Intent(context, Listado_Cuidadores.class);
+                    context.startActivity(intent);
+                }
+
+
                 if(id == R.id.btnMenuCamara){
                     scanearQR();
                 }

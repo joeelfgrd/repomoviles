@@ -1,4 +1,4 @@
-package edu.badpals.examenfinalpdmm;
+package edu.badpals.examenfinalpdmm.fragments;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import edu.badpals.examenfinalpdmm.R;
 
 /**
  * A simple {@link Fragment} subclass.
