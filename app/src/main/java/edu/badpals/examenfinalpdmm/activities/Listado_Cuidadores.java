@@ -135,7 +135,7 @@ public class Listado_Cuidadores extends AppCompatActivity {
     }
 
 
-    /*private void addToEncriptedSharePreferences(int id) {
+    private void addToEncriptedSharePreferences(int id) {
         try {
             MasterKey mk = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -147,12 +147,12 @@ public class Listado_Cuidadores extends AppCompatActivity {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
 
             SharedPreferences.Editor encryptedEditor = encryptedSp.edit();
-            encryptedEditor.putInt(activity_animal_informacion.ANIMAL_ID, id);
+            encryptedEditor.putInt(activity_cuidador_informacion.CUIDADOR_ID, id);
             encryptedEditor.apply();
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
     private class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.MyViewHolder> {
         private List<Cuidador> cuidadores = new ArrayList<>();
@@ -203,11 +203,11 @@ public class Listado_Cuidadores extends AppCompatActivity {
             if (cuidador.getFoto() != null && !cuidador.getFoto().isEmpty()) {
                 myvh.imgCuidador.setImageResource(R.drawable.peruano);
             }
-            /* myvh.btnDetalles.setOnClickListener((view) -> {
-                Intent intent = new Intent(Listado_Cuidadores.this, activity_animal_informacion.class);
+            myvh.btnDetalles.setOnClickListener((view) -> {
+                Intent intent = new Intent(Listado_Cuidadores.this, activity_cuidador_informacion.class);
                 addToEncriptedSharePreferences(cuidador.getId_cuidador());
                 startActivity(intent);
-            });*/
+            });
         }
 
         @Override

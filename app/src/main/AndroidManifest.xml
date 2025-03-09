@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ExamenFinalPDMM"
         tools:targetApi="31">
         <activity
+            android:name=".editPreference.EditPreferences"
+            android:exported="false" />
+        <activity
+            android:name=".activities.activity_cuidador_informacion"
+            android:exported="false" />
+        <activity
             android:name=".activities.Listado_Cuidadores"
             android:exported="false" />
         <activity

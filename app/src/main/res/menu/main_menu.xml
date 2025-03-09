@@ -26,6 +26,12 @@
                 android:layout_height="wrap_content"
                 android:title="Listado Cuidadores"
                 app:showAsAction="never" />
+            <item
+                android:id="@+id/btnPreferencias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="Preferencias de usuario"
+                app:showAsAction="never" />
         </menu>
     </item>
     <item

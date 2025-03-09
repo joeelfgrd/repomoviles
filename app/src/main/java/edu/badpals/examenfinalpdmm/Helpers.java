@@ -24,7 +24,9 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import edu.badpals.examenfinalpdmm.activities.ListadoAnimales;
 import edu.badpals.examenfinalpdmm.activities.Listado_Cuidadores;
 import edu.badpals.examenfinalpdmm.activities.activity_animal_informacion;
+import edu.badpals.examenfinalpdmm.activities.activity_cuidador_informacion;
 import edu.badpals.examenfinalpdmm.activities.activity_menu_principal;
+import edu.badpals.examenfinalpdmm.editPreference.EditPreferences;
 
 public class Helpers {
     //Variable estática para el qr
@@ -61,6 +63,11 @@ public class Helpers {
                     Intent intent = new Intent(context, Listado_Cuidadores.class);
                     context.startActivity(intent);
                 }
+                if(id == R.id.btnPreferencias){
+                    Intent intent = new Intent(context, EditPreferences.class);
+                    context.startActivity(intent);
+                }
+
 
 
                 if(id == R.id.btnMenuCamara){
@@ -89,6 +96,23 @@ public class Helpers {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
 
             return encryptedSp.getInt(activity_animal_informacion.ANIMAL_ID, 0);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static int getID_Cuidador(AppCompatActivity context){
+        try {
+            MasterKey mk = new MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences encryptedSp = EncryptedSharedPreferences.create(context, "ENCRYPTEDSHARE",
+                    mk,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            return encryptedSp.getInt(activity_cuidador_informacion.CUIDADOR_ID, 0);
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
