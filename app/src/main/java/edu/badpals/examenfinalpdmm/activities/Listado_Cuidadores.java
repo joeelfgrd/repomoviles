@@ -26,19 +26,22 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.badpals.examenfinalpdmm.Helpers;
 import edu.badpals.examenfinalpdmm.R;
 import edu.badpals.examenfinalpdmm.model.Animal;
+import edu.badpals.examenfinalpdmm.model.Cuidador;
 import edu.badpals.examenfinalpdmm.repository.AnimalRepository;
+import edu.badpals.examenfinalpdmm.repository.CuidadoresRepository;
 import edu.badpals.examenfinalpdmm.viewModels.AnimalViewModel;
+import edu.badpals.examenfinalpdmm.viewModels.CuidadoresViewModel;
+import edu.badpals.examenfinalpdmm.Helpers;
 
-public class ListadoAnimales extends AppCompatActivity {
+public class Listado_Cuidadores extends AppCompatActivity {
 
-    private RecyclerView recyclerViewAnimales;
-    private Button btnCrearNuevoAnimal;
+    private RecyclerView recyclerViewCuidadores;
+    private Button btnCrearNuevoCuidador;
     private Toolbar tb;
-    private AnimalViewModel animalViewModel;
-    private AnimalAdapter adapter;
+    private CuidadoresViewModel cuidadoresViewModel;
+    private CuidadorAdapter adapter;
 
 
     //Añadimos un array para almacenar el nombre escaneado con la camara
@@ -47,46 +50,54 @@ public class ListadoAnimales extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listado_animales);
+        setContentView(R.layout.activity_listado_cuidadores);
+
 
 
 
 
         // Vinculación de vistas
-        recyclerViewAnimales = findViewById(R.id.recyclerViewAnimales);
-        recyclerViewAnimales.setLayoutManager(new LinearLayoutManager(this));
-        btnCrearNuevoAnimal = findViewById(R.id.btnCrearNuevoAnimal);
-
+        recyclerViewCuidadores = findViewById(R.id.recyclerViewCuidadores);
+        recyclerViewCuidadores.setLayoutManager(new LinearLayoutManager(this));
+        btnCrearNuevoCuidador = findViewById(R.id.btnCrearNuevoCuidador);
 
 
 
         tb = findViewById(R.id.toolbar);
         Helpers.cargarToolbar(this, tb);
 
+
+
+
+
         // Inicialización del ViewModel
-        animalViewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
-        adapter = new AnimalAdapter();
-        recyclerViewAnimales.setAdapter(adapter);
+        cuidadoresViewModel = new ViewModelProvider(this).get(CuidadoresViewModel.class);
+        adapter = new CuidadorAdapter();
+        recyclerViewCuidadores.setAdapter(adapter);
 
         // Observa cambios en la lista de animales y actualiza el adapter
-        animalViewModel.getAnimales().observe(this, new Observer<List<Animal>>() {
+        cuidadoresViewModel.getCuidadores().observe(this, new Observer<List<Cuidador>>() {
             @Override
-            public void onChanged(List<Animal> animales) {
-                adapter.setAnimales(animales);
+            public void onChanged(List<Cuidador> cuidadores) {
+                adapter.setCuidadores(cuidadores);
             }
         });
 
-        // Carga inicial de animales
-        cargarAnimales();
 
-        btnCrearNuevoAnimal.setOnClickListener((view) -> {
-            AnimalRepository.nuevoAnimalDefault();
-            animalViewModel.setAnimales(AnimalRepository.getAnimales());
+        // Carga inicial de animales
+        cargarCuidadores();
+        //Carga listeners de botones
+
+        btnCrearNuevoCuidador.setOnClickListener((view) -> {
+            CuidadoresRepository.nuevoCuidadorDefault();
+            cuidadoresViewModel.setCuidadores(CuidadoresRepository.getCuidadores());
         });
 
 
+
+
         //LOGICA CAMARA
-        Helpers.inicializarQRLauncher(this, nombreAnimalEscaneado, result -> {
+       /* Helpers.inicializarQRLauncher(this, nombreAnimalEscaneado, result -> {
             // Este callback se llama cuando el escaneo finaliza
             nombreAnimalEscaneado[0] = "Elefante Africano";
             //sin hardcodear sería
@@ -111,19 +122,20 @@ public class ListadoAnimales extends AppCompatActivity {
                 Toast.makeText(ListadoAnimales.this, "No se encontró el Animal con nombre: " + nombreAnimalEscaneado[0], Toast.LENGTH_SHORT).show();
             }
 
-        });
+        });*/
     }
 
-    public void cargarAnimales() {
-        List<Animal> animales = AnimalRepository.getAnimales();
-        if (animales.isEmpty()) {
-            Toast.makeText(ListadoAnimales.this, "No hay animales disponibles", Toast.LENGTH_SHORT).show();
+    public void cargarCuidadores() {
+        List<Cuidador> cuidadores = CuidadoresRepository.getCuidadores();
+        if (cuidadores.isEmpty()) {
+            Toast.makeText(Listado_Cuidadores.this, "No hay cuidadores disponibles", Toast.LENGTH_SHORT).show();
         } else {
-            animalViewModel.setAnimales(animales);
+            cuidadoresViewModel.setCuidadores(cuidadores);
         }
     }
 
-    private void addToEncriptedSharePreferences(int id) {
+
+    /*private void addToEncriptedSharePreferences(int id) {
         try {
             MasterKey mk = new MasterKey.Builder(this)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -140,24 +152,25 @@ public class ListadoAnimales extends AppCompatActivity {
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
-    private class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.MyViewHolder> {
-        private List<Animal> animales = new ArrayList<>();
+    private class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.MyViewHolder> {
+        private List<Cuidador> cuidadores = new ArrayList<>();
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imgAnimal;
-            TextView txtNombre, txtRaza, txt_habitat, txt_extinto;
+            ImageView imgCuidador;
+            TextView txtNombre, txtApellidos, txtEdad, txtPais,txtTrabajando;
             Button btnDetalles;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                imgAnimal = itemView.findViewById(R.id.imgAnimal);
+                imgCuidador = itemView.findViewById(R.id.imgPortada);
                 txtNombre = itemView.findViewById(R.id.txtNombre);
-                txtRaza = itemView.findViewById(R.id.txtRaza);
-                txt_habitat = itemView.findViewById(R.id.txt_habitat);
-                txt_extinto = itemView.findViewById(R.id.txt_extinto);
-                btnDetalles = itemView.findViewById(R.id.btnDetalles);
+                txtApellidos = itemView.findViewById(R.id.txtApellidos);
+                txtEdad = itemView.findViewById(R.id.txtEdad);
+                txtPais = itemView.findViewById(R.id.txtPais);
+                txtTrabajando = itemView.findViewById(R.id.txtTrabajando);
+                btnDetalles=itemView.findViewById(R.id.btnDetalles);
             }
         }
 
@@ -165,42 +178,54 @@ public class ListadoAnimales extends AppCompatActivity {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_animal_listado, parent, false);
-            return new MyViewHolder(view);
+                    .inflate(R.layout.fragment_cuidador_listado, parent, false);
+            return new CuidadorAdapter.MyViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             MyViewHolder myvh = (MyViewHolder) holder;
-            Animal animal = animales.get(position);
-            myvh.txtNombre.setText(animal.getNombre());
-            myvh.txtRaza.setText(animal.getRaza());
-            myvh.txt_habitat.setText(animal.getHabitat());
-            if (animal.isExtinto()) {
-                myvh.txt_extinto.setText("si");
+
+            Cuidador cuidador = cuidadores.get(position);
+
+
+            myvh.txtNombre.setText(cuidador.getNombre());
+            myvh.txtApellidos.setText(cuidador.getApellidos());
+            myvh.txtEdad.setText(String.valueOf(cuidador.getEdad()));
+            myvh.txtPais.setText(cuidador.getPais());
+
+            if (cuidador.isTrabajando()) {
+                myvh.txtTrabajando.setText("si");
             } else {
-                myvh.txt_extinto.setText("No");
+                myvh.txtTrabajando.setText("No");
             }
 
-            if (animal.getFoto() != null && !animal.getFoto().isEmpty()) {
-                myvh.imgAnimal.setImageResource(R.drawable.gato);
+            if (cuidador.getFoto() != null && !cuidador.getFoto().isEmpty()) {
+                myvh.imgCuidador.setImageResource(R.drawable.peruano);
             }
-
-            myvh.btnDetalles.setOnClickListener((view) -> {
-                Intent intent = new Intent(ListadoAnimales.this, activity_animal_informacion.class);
-                addToEncriptedSharePreferences(animal.getId());
+            /* myvh.btnDetalles.setOnClickListener((view) -> {
+                Intent intent = new Intent(Listado_Cuidadores.this, activity_animal_informacion.class);
+                addToEncriptedSharePreferences(cuidador.getId_cuidador());
                 startActivity(intent);
-            });
+            });*/
         }
 
         @Override
         public int getItemCount() {
-            return animales.size();
+            return cuidadores.size();
         }
 
-        void setAnimales(List<Animal> nuevosAnimales) {
-            this.animales = nuevosAnimales;
+        void setCuidadores(List<Cuidador> nuevosCuidadores) {
+            this.cuidadores = nuevosCuidadores;
             notifyDataSetChanged();
         }
     }
+
+
+
+
+
+
+
+
 }

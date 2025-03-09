@@ -60,8 +60,6 @@ public class activity_animal_informacion extends AppCompatActivity {
         animalId = Helpers.getID_Animal(this);
         //El id que pasamos al metodo de cargar es el que acabamos de obtener con el intent
         cargarInfoAnimal(animalId);
-
-
         setOCL();
 
 
