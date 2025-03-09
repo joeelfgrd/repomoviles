@@ -7,16 +7,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import edu.badpals.examenfinalpdmm.Helpers;
 import edu.badpals.examenfinalpdmm.R;
 import edu.badpals.examenfinalpdmm.model.Animal;
 import edu.badpals.examenfinalpdmm.repository.AnimalRepository;
+import edu.badpals.examenfinalpdmm.viewModels.Animal_Detalle_viewModel;
 
 public class activity_animal_informacion extends AppCompatActivity {
 
@@ -35,24 +34,26 @@ public class activity_animal_informacion extends AppCompatActivity {
     //inicializamos una variable que es la que cargamos con el resultado de lo de arriba mediante el método de helpers
     public int animalId = 0;
 
-
+    private Animal_Detalle_viewModel animal_Detalle_viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //Llamamos a la vista
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animal_informacion);
-        //Vinculamos las variables con su correspondencia en el xml
-        ivFotoAnimal= findViewById(R.id.ivFotoAnimal);
-        btnVolver= findViewById(R.id.btnVolver);
-        btnExtinguir= findViewById(R.id.btnExtinguir);
-        btnSumar= findViewById(R.id.btnSumar);
-        tvNombre= findViewById(R.id.tvNombre);
-        tvRaza= findViewById(R.id.tvRaza);
-        tvHabitat= findViewById(R.id.tvHabitat);
-        tvAnimalesDisponibles= findViewById(R.id.tvAnimalesDisponibles);
-        tvAnimalesExtintos= findViewById(R.id.tvAnimalesExtintos);
 
+
+        //Vinculamos las variables con su correspondencia en el xml
+        ivFotoAnimal = findViewById(R.id.ivFotoAnimal);
+        btnVolver = findViewById(R.id.btnVolver);
+        btnExtinguir = findViewById(R.id.btnExtinguir);
+        btnSumar = findViewById(R.id.btnSumar);
+        tvNombre = findViewById(R.id.tvNombre);
+        tvRaza = findViewById(R.id.tvRaza);
+        tvHabitat = findViewById(R.id.tvHabitat);
+        tvAnimalesDisponibles = findViewById(R.id.tvAnimalesDisponibles);
+        tvAnimalesExtintos = findViewById(R.id.tvAnimalesExtintos);
 
 
         //Obtenemos el id del item seleccionado en la otra ventana en el recyclerview a traves del sharedpreference y pasamos el dato
@@ -61,16 +62,44 @@ public class activity_animal_informacion extends AppCompatActivity {
         cargarInfoAnimal(animalId);
 
 
+        setOCL();
 
 
+    }
+
+    private void setOCL() {
         btnVolver.setOnClickListener(v -> {
             Intent intent = new Intent(activity_animal_informacion.this, ListadoAnimales.class);
             startActivity(intent);
         });
 
-
-
+        btnExtinguir.setOnClickListener(v -> {
+            Animal animal = AnimalRepository.getAnimalById(animalId);
+            if (animal.isExtinto()) {
+                animal.setExtinto(false);
+                cargarInfoAnimal(animal.getId());
+            } else {
+                animal.setExtinto(true);
+                cargarInfoAnimal(animal.getId());
+            }
+        });
     }
+
+    private void cargarVM(Animal animal) {
+
+        animal_Detalle_viewModel = new ViewModelProvider(this).get(Animal_Detalle_viewModel.class);
+        animal_Detalle_viewModel.getAnimal().observe(this, new Observer<Animal>() {
+            @Override
+            public void onChanged(Animal animal) {
+                if (animal != null) {
+                    cargarAnimal(animal);
+                }
+            }
+        });
+
+        animal_Detalle_viewModel.setAnimal(animal);
+    }
+
 
 
     public void cargarInfoAnimal(int id){
@@ -80,10 +109,16 @@ public class activity_animal_informacion extends AppCompatActivity {
             Toast.makeText(this, "No se encontró el animal con ID: " + id, Toast.LENGTH_SHORT).show();
             return;
         }
-        tvNombre.setText(animal.getNombre());
-        tvRaza.setText(animal.getRaza());
-        tvHabitat.setText(animal.getHabitat());
-        if(animal.isExtinto()){
+        cargarVM(animal);
+
+
+    }
+
+    private void cargarAnimal(Animal result) {
+        tvNombre.setText(result.getNombre());
+        tvRaza.setText(result.getRaza());
+        tvHabitat.setText(result.getHabitat());
+        if(result.isExtinto()){
             tvAnimalesExtintos.setText("Si");
         }else{
             tvAnimalesExtintos.setText("No");

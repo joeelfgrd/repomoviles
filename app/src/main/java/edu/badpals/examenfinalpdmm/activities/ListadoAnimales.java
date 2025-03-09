@@ -73,7 +73,7 @@ public class ListadoAnimales extends AppCompatActivity {
 
         btnCrearNuevoAnimal.setOnClickListener((view) -> {
             AnimalRepository.nuevoAnimalDefault();
-            animalViewModel.setBooks(AnimalRepository.getAnimales());
+            animalViewModel.setAnimales(AnimalRepository.getAnimales());
         });
     }
 
@@ -82,7 +82,7 @@ public class ListadoAnimales extends AppCompatActivity {
         if (animales.isEmpty()) {
             Toast.makeText(ListadoAnimales.this, "No hay animales disponibles", Toast.LENGTH_SHORT).show();
         } else {
-            animalViewModel.setBooks(animales);
+            animalViewModel.setAnimales(animales);
         }
     }
 

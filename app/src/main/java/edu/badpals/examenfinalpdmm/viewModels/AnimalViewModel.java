@@ -20,7 +20,7 @@ public class AnimalViewModel extends ViewModel {
         return animales;
     }
 
-    public void setBooks(List<Animal> nuevosAnimales) {
+    public void setAnimales(List<Animal> nuevosAnimales) {
         animales.setValue(nuevosAnimales);
     }
 }
