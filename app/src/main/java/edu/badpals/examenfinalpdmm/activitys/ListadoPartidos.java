@@ -69,6 +69,7 @@ public class ListadoPartidos extends AppCompatActivity {
 
         cargarPartidos();
 
+
         partidosViewModel.getPartidos().observe(this, new Observer<List<Partido>>() {
             @Override
             public void onChanged(List<Partido> partidos) {

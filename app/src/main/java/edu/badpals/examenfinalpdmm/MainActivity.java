@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import edu.badpals.examenfinalpdmm.activitys.InformacionPartido;
 import edu.badpals.examenfinalpdmm.activitys.ListadoPartidos;
+import edu.badpals.examenfinalpdmm.activitys.Login;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, ListadoPartidos.class);
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
 
 

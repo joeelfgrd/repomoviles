@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ExamenFinalPDMM"
         tools:targetApi="31">
         <activity
+            android:name=".activitys.Login"
+            android:exported="false" />
+        <activity
             android:name=".activitys.Informacion_club"
             android:exported="false" />
         <activity

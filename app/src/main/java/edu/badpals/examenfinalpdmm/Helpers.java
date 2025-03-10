@@ -18,6 +18,7 @@ import java.security.GeneralSecurityException;
 import edu.badpals.examenfinalpdmm.activitys.InformacionPartido;
 import edu.badpals.examenfinalpdmm.activitys.Informacion_club;
 import edu.badpals.examenfinalpdmm.activitys.ListadoPartidos;
+import edu.badpals.examenfinalpdmm.activitys.Login;
 
 public class Helpers {
     public static void cargarToolbar(AppCompatActivity context, Toolbar tb) {
@@ -63,4 +64,21 @@ public class Helpers {
             throw new RuntimeException(e);
         }
     }
+    public static String getNombreLogin(AppCompatActivity context){
+        try {
+            MasterKey mk = new MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+            SharedPreferences encryptedSp = EncryptedSharedPreferences.create(context, "ENCRYPTEDSHARE",
+                    mk,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            return encryptedSp.getString(Login.LOGIN_NOMBRE, "");
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
